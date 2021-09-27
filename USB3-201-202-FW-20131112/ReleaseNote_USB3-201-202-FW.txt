@@ -1,0 +1,227 @@
+****************************************************************************
+***************** D720201 & D720202 Design Resources Release ***************
+****************************************************************************
+ Release Note                                              November 12, 2013
+ 
+ Renesas Electronics D720201 & uPD720202
+ USB3.0 Host Controller Firmware
+
+ Version : 2.0.2.6 : November 12th, 2013
+ Copyright (C) 2011-2013 Renesas Electronics Corporation All Rights Reserved
+****************************************************************************
+
+Note : This firmware is for the following devices.
+      - uPD720201 ES 2.0 sample whose revision ID (in the PCI Configuration 
+       Register) is 2h.
+      - uPD720201 ES 2.1 sample & CS sample & Mass product whose revision
+       ID (in the PCI Configuration Register) is 3h.
+      - uPD720202 ES 2.0 sample & CS sample & Mass product whose revision
+       ID (in the PCI Configuration Register) is 2h.
+
+---------------------------------------------------------------------------
+Table of Contents
+---------------------------------------------------------------------------
+1. Release Files
+2. History
+
+---------------------------------------------------------------------------
+1. Release Files
+---------------------------------------------------------------------------
+Date        Time        Size    File Name                     Version
+2013/10/17  18:42       13KB    K2026090.mem                  2.0.2.6
+
+---------------------------------------------------------------------------
+2. History
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+ Version 2.0.2.6 : November 12, 2013
+---------------------------------------------------------------------------
+- Fixed the following three problems which occur with enabling the Debug
+ Port function.
+
+ 1. The yellow bang comes up on RENESAS USB 3.0 Host Controller in the
+   device manager after S3/S4 Resume and restarting PC.
+
+ 2. There is a possibility that the debug target is not detected if a
+   re-connection between the debug host to debug target occur by USB 3.0
+   Link error.
+
+ 3. There is a possibility that the debug target is not rarely detected
+   when the debug cable connects between the debug host to debug target.
+
+---------------------------------------------------------------------------
+ Version 2.0.2.4 : June 7, 2013
+---------------------------------------------------------------------------
+- The following problems were fixed.
+ 1. The performance of some USB2.0 Card Readers decreased. 
+    This problem occurs from 2.0.1.3 to 2.0.2.0.
+    
+ 2. The yellow bang comes up on RENESAS USB 3.0 Host Controller in the device
+    manager after restarting PC with the following conditions.
+     [Conditions]
+     a)BC_MODE_PX fields of PHY Control 2 Register set to the following values:
+       0010b : SDP - DCP
+       0011b : CDP - DCP
+       0100b : SDP - FVO1
+       0101b : CDP - FVO1
+       0110b : SDP - FVO2
+       0111b : SDP - FVO2
+     b)The asserted timing of PERSTB is equal to or lower than 500ms.
+    
+ 3. There is a possibility that "Sleep and PNP (disable and enable) with IO
+    before and after" test in Windows8 HCK fails when "Allow the computer to 
+    turn off this device to save power" of Power Management tab of Device 
+    Manager is enabled.
+
+ 4. There is a possibility that a specific USB3.0 HDD is not detected in
+    SuperSpeed mode but detected in HS (USB2.0) mode after the PC where the
+    USB3.0 HDD is connected resumed.
+
+    ##Note##
+    The specific USB3.0 HDD comes with a USB3.0-SATA bridge device having the bug
+    that it's Rx-Termination is not in high impedance state while its power plane
+    is stabilizing. This means that the device does not meet the USB3.0 specification
+    (6.11.2 Rx Detect sequence) as follows:
+
+    "During the Device connect, the Device receiver has to guarantee it is
+    always in high impedance state while its power plane is stabilizing. This
+    is required to avoid the Host falsely detecting the Device and starting
+    the training sequence before the Device is ready."
+    
+---------------------------------------------------------------------------
+ Version 2.0.2.0 : November 29, 2012
+---------------------------------------------------------------------------
+- The following problem was fixed.
+ 1. In Linux environment, there is a possibiity that some USB3.0 devices
+    are not detected after the PC connected with them has booted up.
+    We have not seen this problem in Windows environment.
+
+---------------------------------------------------------------------------
+ Version 2.0.1.8 : September 7, 2012
+---------------------------------------------------------------------------
+- The following problems were fixed.
+ 1. Added the function for changing the configuration of "Completion 
+    Timeout Disable" bit in PCI Configuration space.
+   
+    Please see the release note & readme file of ROM Write tool in more 
+    detail.
+   
+ 2. Improved the interoperability of the debugport in Windows 8.
+ 
+---------------------------------------------------------------------------
+ Version 2.0.1.7 : July 19, 2012
+---------------------------------------------------------------------------
+- The following problems were fixed.
+  
+ 1. On the system enabled with PCIe ASPM-L1 function and connected with 
+    some USB devices, PCIe bus reaches Link Down and the USB communication
+    unexpectedly stops in rare condition. 
+
+ 2. Once the firmware of version 2.0.1.3 is stored in the serial ROM with 
+    uPD720202, the FW cannot be erased and updated with the ROM Writing tool 
+    for DOS V.2.0 or older.
+
+    The detail of these problems is reported with "Notification and product 
+    restriction information Ver 7.0 (IBB-ED1-010015)".
+
+ 3. Improved the interoperability of the debugport in Windows 8.
+
+---------------------------------------------------------------------------
+ Version 2.0.1.3 : June 15, 2012
+---------------------------------------------------------------------------
+- The following problems were fixed.
+ 
+ 1. There is a possibility that the USB 3.0 Host controller cannot notify 
+    the xHCI Driver when the Host controller receives the following contiguous 
+    Device Notification Transaction Packets:  Function Wake Notification, 
+    Latency Tolerance Message (LTM) Device Notification, Bus Interval Adjustment
+    Message Device Notification.
+    We have never seen this problem on a real system.
+ 
+ 2. Improved the interoperability of UAS devices in Windows 8.
+ 
+ 3. The yellow bang comes up on RENESAS USB 3.0 Host Controller in the device
+    manager after the ver 2.0.1.1 or older FW is written by using "Serial 
+    ROM Write Tool for Windows" without Power On Reset process. 
+    This issue doesn't occur when the Serial ROM is blank.
+
+ 4. There is a possibility that a Debug host cannot detect the target by 
+    hot-plug when UPD720201/202 is the debug target in Windows 8.
+
+- Tuned the firmware to improve performance of DebugPort Transfer in Windows 8.
+
+- Additional remediation was implemented for the following ver 2.0.0.6 issue:
+
+   [ver 2.0.0.6's history, item 3]
+ 3. Modified the problem that xHC cannot process any commands when USB 3.0
+    Host controller serves as the debugport.
+
+-The following issue, which depends on a specific device, was fixed
+ 1. There is a possibility that USB 3.0 HDD (IO-DATA HDJ-UT2.0) is disconnected
+    and isn't re-connected after executing a data transfer and S3->resume.
+
+---------------------------------------------------------------------------
+ Version 2.0.1.1 : March 12, 2012
+---------------------------------------------------------------------------
+ - The following problems were fixed.
+  1. When the following devices are connected with a High-Speed HUB in the
+     device tree for the USB3.0 host controller, there is a possibility of
+     failing to schedule split transactions. This causes all of the devices
+     in the topology to fail further communication with the host.
+    [Conditions]
+    1. Devices having one or more Full-Speed ISO (isochronous) endpoint
+    2. Devices having one or more Full-Speed or Low-Speed INT endpoint
+    3. Total of the maximum packet size of each endpoint of condition 1 
+       and 2 exceeds 564bytes.
+
+  2. When debug port function is running in Windows 8 and hot-plug is done
+     between host system and target system, the yellow bang comes up on the
+     debug port driver in the Device Manager of Windows 8.
+    
+  3. When the BlockingEvent function (added in xHCI1.0) is used in the 
+     device driver of Windows 8 or other O/S, there is a possibility that
+     ISO data transfers stop.
+     This problem does not occur when the Renesas Electronics device driver
+     is used.
+  
+---------------------------------------------------------------------------
+ Version 2.0.1.0 : February 1, 2012
+---------------------------------------------------------------------------
+ - Modified the FW structures for FW download function. 
+  There is a possibility that the yellow bang will appear on the "Renesas 
+  Electronics USB3.0 host controller" driver in the device manager of the 
+  Windows OS, or xHCI driver in the system bios, or other OS halts.
+
+  The detail of this issue is reported with "Notification and product 
+  restriction information Ver 1.0 (IBB-NK1-110007)".
+  
+  This problem does not occur when the FW is loaded from a Serial ROM.
+  
+---------------------------------------------------------------------------
+ Version 2.0.0.6 : October 24, 2011
+---------------------------------------------------------------------------
+ 1. Modified the problem that a yellow bang appears in Device Manager Windows OS
+    when the PC boots without connecting USB devices into the USB3.0 port, or
+    the USB3.0 host controller drivers are disabled and enabled in Device Manager.
+ 
+ 2. Modified the problem that can cause the StopEndpoint command time-out error.
+
+ 3. Modified the problem that cannot process the any commands when USB 3.0 Host
+    controller behaves as the debugport.
+
+ 4. Modified the problem that cannot detect a USB 2.0 devices when USB 3.0 Host
+    controller drivers are disabled and enabled in device manager while connecting 
+    a USB 2.0 Device into USB3.0 port.
+
+ 5. Changed the value of PSIC of xHCI Suuported Protcol Capability register.
+
+ 6. Changed the PHY parameters.
+
+---------------------------------------------------------------------------
+ Version 2.0.0.3 : September 8, 2011
+---------------------------------------------------------------------------
+- First Release for uPD720201/uPD720202 ES 2.0 sample & CS sample & Mass 
+  product whose revision ID of PCI Configuration Register is 2h.
+
+---------------------------------------------------------------------------
+
